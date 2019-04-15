@@ -1,0 +1,5 @@
+declare namespace m='http://webservices.daehosting.com/temperature';
+
+//m:FahrenheitToCelsiusResult
+
+${#TestCase#EXPECTEDRESULT}
