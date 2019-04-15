@@ -1,0 +1,7 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+   <soap:Body>
+      <m:FahrenheitToCelsiusResponse xmlns:m="http://webservices.daehosting.com/temperature">
+         <m:FahrenheitToCelsiusResult>100</m:FahrenheitToCelsiusResult>
+      </m:FahrenheitToCelsiusResponse>
+   </soap:Body>
+</soap:Envelope>
