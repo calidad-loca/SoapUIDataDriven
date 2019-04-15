@@ -1,0 +1,53 @@
+import jxl.*
+import jxl.write.*
+import com.eviware.soapui.support.XmlHolder
+def groovyUtils = new com.eviware.soapui.support.GroovyUtils(context)
+Workbook workbook = Workbook.getWorkbook(new File("c:\\SoapUI_Play\\Fahrenheit-Temps.xls"))
+//The writeable sheet will erase any data, so we can't use the data sheet and update it with the results
+WritableWorkbook copy = Workbook.createWorkbook(new File("c:\\SoapUI_Play\\Fahrenheit-Chart.xls"), workbook);
+WritableSheet sheet1 = copy.createSheet("Fahrenheit to Celsius", 0)
+Sheet sheet = workbook.getSheet(0)
+def rowCount = sheet.getRows()
+
+	//Write columns headings
+		Label H1 = new Label(0, 0, "Fahrenheit Value Submitted"); 
+		sheet1.addCell(H1);
+		Label H2 = new Label(1, 0, "Expected Result"); 
+		sheet1.addCell(H2);
+		Label H3 = new Label(2, 0, "Actual Result"); 
+		sheet1.addCell(H3);
+		
+for (r=1; r<rowCount; r++){		//r=1 skip header row
+
+	//Read a Fahrentheit temp
+  		valCellContents=sheet.getCell(0,r) 
+		cellContents=valCellContents.getContents()  
+		FAHRENHEIT = cellContents.toString()
+		testRunner.testCase.setPropertyValue("Fahrenheit",FAHRENHEIT)
+		Label fh = new Label(0, r, FAHRENHEIT); //1st column
+		sheet1.addCell(fh);
+
+		
+// Below I'm going to use the properties to perform assertions
+		valCellContents=sheet.getCell(1,r) 
+		cellContents=valCellContents.getContents()  
+		EXPECTEDRESULT = cellContents.toString()
+		testRunner.testCase.setPropertyValue("EXPECTEDRESULT",EXPECTEDRESULT)
+		Label expectedResult = new Label(1, r, EXPECTEDRESULT); 
+		sheet1.addCell(expectedResult);
+								
+	testRunner.runTestStepByName("FahrenheitToCelsius-Request")	
+
+	//Get Celsius temp fromCelsiusValue Response
+		def res = context.expand('${FahrenheitToCelsius-Request#response}')
+		def response = new XmlHolder(res)
+		def CelsiusValue = response.getNodeValue('//m:FahrenheitToCelsiusResult')
+
+//Write the actual result in 3rd column
+		Label label = new Label(2, r, CelsiusValue); //3rd column
+		sheet1.addCell(label);
+	
+} //Gets next row
+copy.write(); 
+copy.close();
+workbook.close()
