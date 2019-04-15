@@ -1,0 +1,8 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://webservices.daehosting.com/temperature">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:FahrenheitToCelsius>
+         <tem:nFahrenheit>${#TestCase#Fahrenheit}</tem:nFahrenheit>
+      </tem:FahrenheitToCelsius>
+   </soapenv:Body>
+</soapenv:Envelope>
